@@ -2,60 +2,146 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI YouTube Manager</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Islamic AI Studio</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#090d18;color:#fff;font-family:Arial,sans-serif}
-header{padding:22px;background:#11182a;border-bottom:1px solid #27314a}
-h1{margin:0;color:#8b9cff;font-size:24px}
-header p{color:#aab3c8}
-main{padding:20px;max-width:1100px;margin:auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
-.card{background:#151e32;border:1px solid #293653;border-radius:15px;padding:20px;margin-bottom:15px}
-h2{font-size:18px}
-.number{font-size:30px;color:#9caeff;font-weight:bold}
-button{background:#687cff;color:white;border:0;border-radius:9px;padding:12px 16px;font-weight:bold;margin-top:10px}
-input{width:100%;padding:14px;border-radius:8px;border:1px solid #44506a;background:#0d1424;color:white;margin-top:10px}
-.small{color:#aab3c8;font-size:13px}
+body{margin:0;background:#091510;color:#f5f5ed;font-family:Arial,sans-serif}
+header{padding:22px;background:#10251c;border-bottom:1px solid #31533e}
+header h1{margin:0;color:#d9bd79}
+header p,.muted{color:#a9b8ac;font-size:13px}
+main{max-width:1050px;margin:auto;padding:18px}
+nav{display:flex;gap:8px;overflow:auto;padding:12px 0}
+nav button{white-space:nowrap;background:#1a3024;color:#eee;border:1px solid #385541}
+button{padding:12px 16px;border:0;border-radius:9px;background:#c5a45c;color:#152117;font-weight:bold;cursor:pointer}
+nav button.active{background:#c5a45c;color:#152117}
+.card{background:#13251b;border:1px solid #304c39;border-radius:15px;padding:18px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.stat{font-size:27px;color:#e0c37f;font-weight:bold;margin-top:10px}
+input,select,textarea{width:100%;padding:13px;margin:8px 0 15px;background:#0b1911;color:white;border:1px solid #46604b;border-radius:8px}
+textarea{min-height:100px;resize:vertical}
+label{font-size:13px;color:#d8e0d8}
+.page{display:none}
+.page.active{display:block}
+.result{white-space:pre-wrap;line-height:1.6;color:#e6e8df}
+footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 </style>
 </head>
 <body>
 <header>
-<h1>▶ AI YouTube Manager</h1>
-<p>Your smart channel management dashboard</p>
+<h1>☪ Islamic AI Studio</h1>
+<p>Islamic & Informative YouTube Manager</p>
 </header>
+
 <main>
+<nav>
+<button class="active" onclick="showPage('home',this)">Dashboard</button>
+<button onclick="showPage('studio',this)">AI Studio</button>
+<button onclick="showPage('approval',this)">Approval</button>
+<button onclick="showPage('channel',this)">YouTube</button>
+</nav>
+
+<section id="home" class="page active">
+<h2>Welcome to your Studio</h2>
+<p class="muted">Create, manage and review your Islamic videos.</p>
 <div class="grid">
-<div class="card"><h2>Content Ideas</h2><div class="number">∞</div><p class="small">Generate new video ideas</p></div>
-<div class="card"><h2>Pending Approval</h2><div class="number">0</div><p class="small">Review before publishing</p></div>
-<div class="card"><h2>Scheduled Videos</h2><div class="number">0</div><p class="small">Plan your uploads</p></div>
+<div class="card">Content Projects<div class="stat" id="projects">0</div></div>
+<div class="card">Pending Approval<div class="stat" id="pending">0</div></div>
+<div class="card">Published Videos<div class="stat">0</div></div>
 </div>
 <div class="card">
-<h2>AI Content Assistant</h2>
-<p class="small">Enter a topic to generate a video idea.</p>
+<h3>🚀 Start a new video</h3>
+<p class="muted">Create a Short or a Long video project.</p>
+<button onclick="showPage('studio',document.querySelectorAll('nav button')[1])">Open AI Studio</button>
+</div>
+</section>
+
+<section id="studio" class="page">
+<h2>AI Content Studio</h2>
+<div class="card">
+<label>Video topic</label>
 <input id="topic" placeholder="Example: Importance of Salah">
-<button onclick="generate()">Generate Idea</button>
-<div id="result"></div>
+
+<label>Content category</label>
+<select id="category">
+<option>Quran & Tafsir</option>
+<option>Hadith & Sunnah</option>
+<option>Islamic History</option>
+<option>Islamic Reminders</option>
+<option>Duas & Dhikr</option>
+<option>Educational & Informative</option>
+</select>
+
+<label>Video format</label>
+<select id="format">
+<option>YouTube Shorts</option>
+<option>Long Video</option>
+</select>
+
+<label>Language</label>
+<select id="language">
+<option>Hindi / Urdu</option>
+<option>Roman Urdu</option>
+<option>English</option>
+</select>
+
+<button onclick="createDraft()">Create Project</button>
 </div>
-<div class="card">
+<div class="card" id="draft" style="display:none">
+<h3>Project Draft</h3>
+<div id="output" class="result"></div>
+<p class="muted">Demo project only. No AI research or video has been generated yet.</p>
+</div>
+</section>
+
+<section id="approval" class="page">
 <h2>Approval Center</h2>
-<p class="small">All content must be reviewed and approved before publishing.</p>
-<button onclick="alert('Demo mode: No video has been published.')">Review Demo</button>
-</div>
 <div class="card">
-<h2>YouTube Channel</h2>
-<p class="small">YouTube connection will be configured later.</p>
-<button onclick="alert('YouTube OAuth setup is coming next.')">Connect YouTube</button>
+<p id="approvalText">No projects waiting for review.</p>
+<p class="muted">Review religious references, script and final video before publishing.</p>
 </div>
-<p class="small">DEMO MODE • No real uploads or API connections yet.</p>
+</section>
+
+<section id="channel" class="page">
+<h2>YouTube Channel</h2>
+<div class="card">
+<h3>Channel Connection</h3>
+<p class="muted">YouTube OAuth connection is not configured yet.</p>
+<button onclick="alert('YouTube connection will be added after secure backend setup.')">Connect YouTube</button>
+</div>
+</section>
+
+<footer>
+ISLAMIC AI STUDIO • VERSION 2.0 • DEMO MODE
+</footer>
 </main>
+
 <script>
-function generate(){
+let count=0;
+function showPage(id,btn){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+}
+function createDraft(){
 let topic=document.getElementById('topic').value.trim();
 if(!topic){alert('Please enter a topic');return;}
-document.getElementById('result').innerHTML=
-'<div class="card"><h2>Suggested Idea</h2><p>'+topic.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p><p class="small">Review and verify all information before using or publishing.</p></div>';
+let category=document.getElementById('category').value;
+let format=document.getElementById('format').value;
+let language=document.getElementById('language').value;
+count++;
+document.getElementById('projects').textContent=count;
+document.getElementById('pending').textContent=count;
+document.getElementById('approvalText').textContent=
+count+' demo project(s) waiting for review.';
+document.getElementById('output').textContent=
+'TOPIC: '+topic+
+'\nCATEGORY: '+category+
+'\nFORMAT: '+format+
+'\nLANGUAGE: '+language+
+'\n\nNEXT STEPS:\n1. Research authentic sources.\n2. Prepare and verify the script.\n3. Create voiceover and visuals.\n4. Edit and render the video.\n5. Review the final video before publishing.';
+document.getElementById('draft').style.display='block';
 }
 </script>
 </body>
