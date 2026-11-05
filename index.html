@@ -3,36 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Islamic AI Studio</title>
+<title>Imaan Verse AI Studio</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#091510;color:#f5f5ed;font-family:Arial,sans-serif}
 header{padding:22px;background:#10251c;border-bottom:1px solid #31533e}
 header h1{margin:0;color:#d9bd79}
-header p,.muted{color:#a9b8ac;font-size:13px}
-main{max-width:1050px;margin:auto;padding:18px}
+p{line-height:1.5}
+.muted{color:#a9b8ac;font-size:13px}
+main{max-width:850px;margin:auto;padding:18px}
 nav{display:flex;gap:8px;overflow:auto;padding:12px 0}
-nav button{white-space:nowrap;background:#1a3024;color:#eee;border:1px solid #385541}
-button{padding:12px 16px;border:0;border-radius:9px;background:#c5a45c;color:#152117;font-weight:bold;cursor:pointer}
+button{padding:13px 16px;border:0;border-radius:9px;background:#c5a45c;color:#152117;font-weight:bold;cursor:pointer;margin:4px}
+nav button{white-space:nowrap;background:#1a3024;color:white;border:1px solid #385541}
 nav button.active{background:#c5a45c;color:#152117}
 .card{background:#13251b;border:1px solid #304c39;border-radius:15px;padding:18px;margin:14px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
-.stat{font-size:27px;color:#e0c37f;font-weight:bold;margin-top:10px}
-input,select,textarea{width:100%;padding:13px;margin:8px 0 15px;background:#0b1911;color:white;border:1px solid #46604b;border-radius:8px}
-textarea{min-height:100px;resize:vertical}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.stat{font-size:27px;color:#e0c37f;margin-top:10px}
+input,select,textarea{width:100%;padding:13px;margin:8px 0 15px;background:#0b1911;color:white;border:1px solid #46604b;border-radius:8px;font:inherit}
+textarea{min-height:190px;line-height:1.5}
 label{font-size:13px;color:#d8e0d8}
 .page{display:none}
 .page.active{display:block}
-.result{white-space:pre-wrap;line-height:1.6;color:#e6e8df}
+.notice{background:#10251c;border-left:3px solid #c5a45c;padding:12px;font-size:13px;line-height:1.5}
 footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 </style>
 </head>
 <body>
 <header>
-<h1>☪ Islamic AI Studio</h1>
-<p>Islamic & Informative YouTube Manager</p>
+<h1>☪ Imaan Verse AI Studio</h1>
+<p class="muted">Islamic & Informative YouTube Manager</p>
 </header>
-
 <main>
 <nav>
 <button class="active" onclick="showPage('home',this)">Dashboard</button>
@@ -43,7 +43,7 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 
 <section id="home" class="page active">
 <h2>Welcome to your Studio</h2>
-<p class="muted">Create, manage and review your Islamic videos.</p>
+<p class="muted">Create and manage your Islamic videos.</p>
 <div class="grid">
 <div class="card">Content Projects<div class="stat" id="projects">0</div></div>
 <div class="card">Pending Approval<div class="stat" id="pending">0</div></div>
@@ -51,7 +51,6 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 </div>
 <div class="card">
 <h3>🚀 Start a new video</h3>
-<p class="muted">Create a Short or a Long video project.</p>
 <button onclick="showPage('studio',document.querySelectorAll('nav button')[1])">Open AI Studio</button>
 </div>
 </section>
@@ -59,10 +58,10 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 <section id="studio" class="page">
 <h2>AI Content Studio</h2>
 <div class="card">
-<label>Video topic</label>
+<label>Video Topic</label>
 <input id="topic" placeholder="Example: Importance of Salah">
 
-<label>Content category</label>
+<label>Category</label>
 <select id="category">
 <option>Quran & Tafsir</option>
 <option>Hadith & Sunnah</option>
@@ -72,7 +71,7 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 <option>Educational & Informative</option>
 </select>
 
-<label>Video format</label>
+<label>Video Format</label>
 <select id="format">
 <option>YouTube Shorts</option>
 <option>Long Video</option>
@@ -85,12 +84,21 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 <option>English</option>
 </select>
 
-<button onclick="createDraft()">Create Project</button>
+<button onclick="createProject()">Create Project</button>
 </div>
+
 <div class="card" id="draft" style="display:none">
 <h3>Project Draft</h3>
-<div id="output" class="result"></div>
-<p class="muted">Demo project only. No AI research or video has been generated yet.</p>
+<div id="output"></div>
+<button onclick="makePrompt()">Generate Claude Prompt</button>
+</div>
+
+<div class="card" id="promptCard" style="display:none">
+<h3>Claude Script Prompt</h3>
+<p class="muted">Copy this prompt and paste it into your Claude app.</p>
+<textarea id="prompt" readonly></textarea>
+<button onclick="copyPrompt()">Copy Prompt</button>
+<p id="status" class="muted"></p>
 </div>
 </section>
 
@@ -98,50 +106,125 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 <h2>Approval Center</h2>
 <div class="card">
 <p id="approvalText">No projects waiting for review.</p>
-<p class="muted">Review religious references, script and final video before publishing.</p>
+<div class="notice">Check every religious reference and review the final video yourself. Nothing is published automatically.</div>
 </div>
 </section>
 
 <section id="channel" class="page">
 <h2>YouTube Channel</h2>
 <div class="card">
-<h3>Channel Connection</h3>
-<p class="muted">YouTube OAuth connection is not configured yet.</p>
-<button onclick="alert('YouTube connection will be added after secure backend setup.')">Connect YouTube</button>
+<p>YouTube connection is not configured yet.</p>
+<p class="muted">Never enter your Google password on this demo page.</p>
 </div>
 </section>
 
-<footer>
-ISLAMIC AI STUDIO • VERSION 2.0 • DEMO MODE
-</footer>
+<footer>IMAAN VERSE • CLAUDE PROMPT ASSIST</footer>
 </main>
 
 <script>
 let count=0;
+let project=null;
+
 function showPage(id,btn){
 document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
 document.getElementById(id).classList.add('active');
 document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
 btn.classList.add('active');
 }
-function createDraft(){
+
+function createProject(){
 let topic=document.getElementById('topic').value.trim();
 if(!topic){alert('Please enter a topic');return;}
-let category=document.getElementById('category').value;
-let format=document.getElementById('format').value;
-let language=document.getElementById('language').value;
+
+project={
+topic:topic,
+category:document.getElementById('category').value,
+format:document.getElementById('format').value,
+language:document.getElementById('language').value
+};
+
 count++;
 document.getElementById('projects').textContent=count;
 document.getElementById('pending').textContent=count;
-document.getElementById('approvalText').textContent=
-count+' demo project(s) waiting for review.';
+document.getElementById('approvalText').textContent=count+' project(s) need review.';
+
 document.getElementById('output').textContent=
-'TOPIC: '+topic+
-'\nCATEGORY: '+category+
-'\nFORMAT: '+format+
-'\nLANGUAGE: '+language+
-'\n\nNEXT STEPS:\n1. Research authentic sources.\n2. Prepare and verify the script.\n3. Create voiceover and visuals.\n4. Edit and render the video.\n5. Review the final video before publishing.';
+'TOPIC: '+project.topic+
+'\nCATEGORY: '+project.category+
+'\nFORMAT: '+project.format+
+'\nLANGUAGE: '+project.language+
+'\n\nNext: Generate a Claude prompt and review its script.';
+
 document.getElementById('draft').style.display='block';
+document.getElementById('promptCard').style.display='none';
+}
+
+function makePrompt(){
+if(!project)return;
+
+let length=project.format==='YouTube Shorts'
+?'45–60 seconds, around 100–140 spoken words.'
+:'A structured 5–7 minute video script.';
+
+let language=project.language==='Roman Urdu'
+?'Write in simple Roman Urdu.'
+:project.language==='Hindi / Urdu'
+?'Write in simple spoken Hindi/Urdu.'
+:'Write in clear simple English.';
+
+let p=`Act as a careful Islamic educational video scriptwriter.
+
+TOPIC: ${project.topic}
+CATEGORY: ${project.category}
+FORMAT: ${project.format}
+LANGUAGE: ${project.language}
+
+REQUIREMENTS:
+- ${language}
+- Length: ${length}
+- Start with an engaging introduction.
+- Keep the tone respectful and educational.
+- Include narration and visual suggestions.
+- Give 3 title ideas and a video description.
+
+ISLAMIC ACCURACY RULES:
+- Never invent Quran verses or Hadith.
+- Never guess Arabic wording, references, book numbers or authenticity grades.
+- For Quran references, provide Surah name and Ayah number.
+- For Hadith, provide collection and reference number only when reliably known.
+- Clearly mark uncertain references as NEEDS VERIFICATION.
+- Separate Quran, Hadith, scholarly interpretation and general advice.
+- Do not present personal interpretation as Tafsir.
+- Do not claim that a source has been checked unless it actually has.
+- If uncertain, leave the claim out.
+
+OUTPUT:
+1. Three video titles.
+2. Complete narration script.
+3. On-screen text suggestions.
+4. Quran and Hadith references with verification status.
+5. Video description.
+6. Hashtags.
+7. Human verification checklist.
+
+This is a draft for human review, not a religious ruling.`;
+
+document.getElementById('prompt').value=p;
+document.getElementById('promptCard').style.display='block';
+document.getElementById('status').textContent='';
+document.getElementById('promptCard').scrollIntoView({behavior:'smooth'});
+}
+
+async function copyPrompt(){
+let box=document.getElementById('prompt');
+try{
+await navigator.clipboard.writeText(box.value);
+document.getElementById('status').textContent='Copied! Open Claude and paste the prompt.';
+}catch(e){
+box.focus();
+box.select();
+document.getElementById('status').textContent='Text selected. Long-press and choose Copy.';
+}
 }
 </script>
 </body>
