@@ -6,26 +6,23 @@
 <title>Imaan Verse AI Studio</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#091510;color:#f5f5ed;font-family:Arial,sans-serif}
-header{padding:22px;background:#10251c;border-bottom:1px solid #31533e}
-header h1{margin:0;color:#d9bd79}
-p{line-height:1.5}
-.muted{color:#a9b8ac;font-size:13px}
-main{max-width:850px;margin:auto;padding:18px}
-nav{display:flex;gap:8px;overflow:auto;padding:12px 0}
-button{padding:13px 16px;border:0;border-radius:9px;background:#c5a45c;color:#152117;font-weight:bold;cursor:pointer;margin:4px}
-nav button{white-space:nowrap;background:#1a3024;color:white;border:1px solid #385541}
-nav button.active{background:#c5a45c;color:#152117}
-.card{background:#13251b;border:1px solid #304c39;border-radius:15px;padding:18px;margin:14px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.stat{font-size:27px;color:#e0c37f;margin-top:10px}
-input,select,textarea{width:100%;padding:13px;margin:8px 0 15px;background:#0b1911;color:white;border:1px solid #46604b;border-radius:8px;font:inherit}
-textarea{min-height:190px;line-height:1.5}
+body{margin:0;background:#091510;color:#f5f5ed;font-family:Arial}
+header{padding:20px;background:#10251c;border-bottom:1px solid #31533e}
+h1{color:#d9bd79;margin:0}
+main{max-width:850px;margin:auto;padding:16px}
+nav{display:flex;gap:6px;overflow:auto;padding:12px 0}
+button{padding:12px;border:0;border-radius:8px;background:#c5a45c;color:#152117;font-weight:bold;margin:4px}
+nav button{background:#1a3024;color:white;border:1px solid #385541}
+.card{background:#13251b;border:1px solid #304c39;border-radius:14px;padding:16px;margin:14px 0}
+input,select,textarea{width:100%;padding:12px;margin:8px 0 14px;background:#0b1911;color:white;border:1px solid #46604b;border-radius:8px;font:inherit}
+textarea{min-height:220px;line-height:1.5}
 label{font-size:13px;color:#d8e0d8}
-.page{display:none}
-.page.active{display:block}
-.notice{background:#10251c;border-left:3px solid #c5a45c;padding:12px;font-size:13px;line-height:1.5}
-footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
+.page{display:none}.page.active{display:block}
+.muted{color:#a9b8ac;font-size:13px}
+.notice{padding:12px;background:#10251c;border-left:3px solid #c5a45c}
+.status{font-weight:bold;color:#d9bd79}
+.green{background:#285b39;color:white}
+.red{background:#713333;color:white}
 </style>
 </head>
 <body>
@@ -33,25 +30,26 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 <h1>☪ Imaan Verse AI Studio</h1>
 <p class="muted">Islamic & Informative YouTube Manager</p>
 </header>
+
 <main>
 <nav>
-<button class="active" onclick="showPage('home',this)">Dashboard</button>
-<button onclick="showPage('studio',this)">AI Studio</button>
-<button onclick="showPage('approval',this)">Approval</button>
-<button onclick="showPage('channel',this)">YouTube</button>
+<button onclick="page('home')">Dashboard</button>
+<button onclick="page('studio')">AI Studio</button>
+<button onclick="page('approval')">Approval</button>
+<button onclick="page('channel')">YouTube</button>
 </nav>
 
 <section id="home" class="page active">
-<h2>Welcome to your Studio</h2>
-<p class="muted">Create and manage your Islamic videos.</p>
-<div class="grid">
-<div class="card">Content Projects<div class="stat" id="projects">0</div></div>
-<div class="card">Pending Approval<div class="stat" id="pending">0</div></div>
-<div class="card">Published Videos<div class="stat">0</div></div>
+<h2>Welcome to Imaan Verse</h2>
+<div class="card">
+<h3>Content Projects</h3>
+<p class="status" id="projectCount">0</p>
+<h3>Approval Status</h3>
+<p class="status" id="homeStatus">No script submitted</p>
 </div>
 <div class="card">
-<h3>🚀 Start a new video</h3>
-<button onclick="showPage('studio',document.querySelectorAll('nav button')[1])">Open AI Studio</button>
+<h3>Start a new video</h3>
+<button onclick="page('studio')">Open AI Studio</button>
 </div>
 </section>
 
@@ -68,7 +66,6 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 <option>Islamic History</option>
 <option>Islamic Reminders</option>
 <option>Duas & Dhikr</option>
-<option>Educational & Informative</option>
 </select>
 
 <label>Video Format</label>
@@ -84,148 +81,158 @@ footer{text-align:center;color:#89998d;font-size:12px;padding:25px}
 <option>English</option>
 </select>
 
-<button onclick="createProject()">Create Project</button>
-</div>
-
-<div class="card" id="draft" style="display:none">
-<h3>Project Draft</h3>
-<div id="output"></div>
 <button onclick="makePrompt()">Generate Claude Prompt</button>
 </div>
 
-<div class="card" id="promptCard" style="display:none">
-<h3>Claude Script Prompt</h3>
-<p class="muted">Copy this prompt and paste it into your Claude app.</p>
-<textarea id="prompt" readonly></textarea>
+<div class="card">
+<h3>Claude Prompt</h3>
+<textarea id="prompt" placeholder="Your generated prompt will appear here"></textarea>
 <button onclick="copyPrompt()">Copy Prompt</button>
-<p id="status" class="muted"></p>
+<p class="muted">Paste this prompt into Claude. Then copy Claude's completed script below.</p>
+</div>
+
+<div class="card">
+<h3>Paste AI Script</h3>
+<textarea id="script" placeholder="Paste your complete Claude script here..."></textarea>
+<button onclick="submitScript()">Submit for Approval</button>
+<p id="submitStatus" class="status"></p>
 </div>
 </section>
 
 <section id="approval" class="page">
-<h2>Approval Center</h2>
+<h2>Human Approval Center</h2>
 <div class="card">
-<p id="approvalText">No projects waiting for review.</p>
-<div class="notice">Check every religious reference and review the final video yourself. Nothing is published automatically.</div>
+<p class="status" id="approvalStatus">No script submitted</p>
+<label>Review and edit your script</label>
+<textarea id="reviewScript" placeholder="Your submitted script will appear here"></textarea>
+<button onclick="saveEdit()">Save Changes</button>
+<button class="green" onclick="approveScript()">Approve Script</button>
+<button class="red" onclick="rejectScript()">Reject Script</button>
+<p id="approvalMessage" class="status"></p>
+</div>
+<div class="notice">
+Check Quran verses, Hadith references, translations and authenticity yourself before approval.
 </div>
 </section>
 
 <section id="channel" class="page">
-<h2>YouTube Channel</h2>
+<h2>YouTube Upload</h2>
 <div class="card">
-<p>YouTube connection is not configured yet.</p>
-<p class="muted">Never enter your Google password on this demo page.</p>
+<p id="uploadStatus" class="status">Upload Locked</p>
+<p class="muted">YouTube connection is not configured yet.</p>
+<button id="uploadButton" disabled>Upload Video (Not Connected)</button>
+<p class="muted">Approval here is a local workflow demonstration, not a secure server-side upload restriction.</p>
 </div>
 </section>
 
-<footer>IMAAN VERSE • CLAUDE PROMPT ASSIST</footer>
+<footer class="muted">IMAAN VERSE • AI STUDIO</footer>
 </main>
 
 <script>
-let count=0;
-let project=null;
+let data=JSON.parse(localStorage.getItem("imaanProject")||"{}");
 
-function showPage(id,btn){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
+function store(){
+localStorage.setItem("imaanProject",JSON.stringify(data));
 }
 
-function createProject(){
-let topic=document.getElementById('topic').value.trim();
-if(!topic){alert('Please enter a topic');return;}
-
-project={
-topic:topic,
-category:document.getElementById('category').value,
-format:document.getElementById('format').value,
-language:document.getElementById('language').value
-};
-
-count++;
-document.getElementById('projects').textContent=count;
-document.getElementById('pending').textContent=count;
-document.getElementById('approvalText').textContent=count+' project(s) need review.';
-
-document.getElementById('output').textContent=
-'TOPIC: '+project.topic+
-'\nCATEGORY: '+project.category+
-'\nFORMAT: '+project.format+
-'\nLANGUAGE: '+project.language+
-'\n\nNext: Generate a Claude prompt and review its script.';
-
-document.getElementById('draft').style.display='block';
-document.getElementById('promptCard').style.display='none';
+function page(id){
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+document.getElementById(id).classList.add("active");
 }
 
 function makePrompt(){
-if(!project)return;
+let t=document.getElementById("topic").value.trim();
+if(!t){alert("Enter a video topic first");return;}
 
-let length=project.format==='YouTube Shorts'
-?'45–60 seconds, around 100–140 spoken words.'
-:'A structured 5–7 minute video script.';
+let c=document.getElementById("category").value;
+let f=document.getElementById("format").value;
+let l=document.getElementById("language").value;
 
-let language=project.language==='Roman Urdu'
-?'Write in simple Roman Urdu.'
-:project.language==='Hindi / Urdu'
-?'Write in simple spoken Hindi/Urdu.'
-:'Write in clear simple English.';
+document.getElementById("prompt").value=
+`Act as a careful Islamic educational video scriptwriter.
 
-let p=`Act as a careful Islamic educational video scriptwriter.
+TOPIC: ${t}
+CATEGORY: ${c}
+FORMAT: ${f}
+LANGUAGE: ${l}
 
-TOPIC: ${project.topic}
-CATEGORY: ${project.category}
-FORMAT: ${project.format}
-LANGUAGE: ${project.language}
+Write an engaging educational video script.
+Include narration, visual suggestions, 3 titles,
+description, hashtags and source references.
 
-REQUIREMENTS:
-- ${language}
-- Length: ${length}
-- Start with an engaging introduction.
-- Keep the tone respectful and educational.
-- Include narration and visual suggestions.
-- Give 3 title ideas and a video description.
-
-ISLAMIC ACCURACY RULES:
+ISLAMIC ACCURACY:
 - Never invent Quran verses or Hadith.
-- Never guess Arabic wording, references, book numbers or authenticity grades.
-- For Quran references, provide Surah name and Ayah number.
-- For Hadith, provide collection and reference number only when reliably known.
-- Clearly mark uncertain references as NEEDS VERIFICATION.
-- Separate Quran, Hadith, scholarly interpretation and general advice.
-- Do not present personal interpretation as Tafsir.
-- Do not claim that a source has been checked unless it actually has.
-- If uncertain, leave the claim out.
+- Give Surah names and Ayah numbers.
+- Give Hadith collection and reference only when reliably known.
+- Mark uncertain references NEEDS VERIFICATION.
+- Do not present personal opinions as Tafsir.
+- Do not claim a source was verified unless it was.
+- Keep the content respectful and educational.
 
-OUTPUT:
-1. Three video titles.
-2. Complete narration script.
-3. On-screen text suggestions.
-4. Quran and Hadith references with verification status.
-5. Video description.
-6. Hashtags.
-7. Human verification checklist.
-
-This is a draft for human review, not a religious ruling.`;
-
-document.getElementById('prompt').value=p;
-document.getElementById('promptCard').style.display='block';
-document.getElementById('status').textContent='';
-document.getElementById('promptCard').scrollIntoView({behavior:'smooth'});
+This is a draft for human review.`;
 }
 
 async function copyPrompt(){
-let box=document.getElementById('prompt');
+let p=document.getElementById("prompt");
 try{
-await navigator.clipboard.writeText(box.value);
-document.getElementById('status').textContent='Copied! Open Claude and paste the prompt.';
+await navigator.clipboard.writeText(p.value);
+alert("Prompt copied!");
 }catch(e){
-box.focus();
-box.select();
-document.getElementById('status').textContent='Text selected. Long-press and choose Copy.';
+p.select();
+alert("Select and copy the prompt.");
 }
 }
+
+function submitScript(){
+let s=document.getElementById("script").value.trim();
+if(!s){alert("Paste your AI script first");return;}
+
+data.script=s;
+data.status="Pending Approval";
+store();
+refresh();
+document.getElementById("submitStatus").textContent="Submitted for human review!";
+}
+
+function saveEdit(){
+let s=document.getElementById("reviewScript").value.trim();
+if(!s){alert("Script cannot be empty");return;}
+data.script=s;
+if(data.status==="Approved")data.status="Pending Approval";
+store();
+refresh();
+document.getElementById("approvalMessage").textContent="Changes saved. Review again before approval.";
+}
+
+function approveScript(){
+if(!data.script){alert("No script to approve");return;}
+if(!confirm("Have you checked the script and all religious references?"))return;
+data.status="Approved";
+store();
+refresh();
+document.getElementById("approvalMessage").textContent="Script approved by you.";
+}
+
+function rejectScript(){
+if(!data.script){alert("No script to reject");return;}
+if(!confirm("Reject this script?"))return;
+data.status="Rejected";
+store();
+refresh();
+document.getElementById("approvalMessage").textContent="Script rejected.";
+}
+
+function refresh(){
+let exists=!!data.script;
+document.getElementById("projectCount").textContent=exists?"1":"0";
+document.getElementById("homeStatus").textContent=data.status||"No script submitted";
+document.getElementById("approvalStatus").textContent=data.status||"No script submitted";
+document.getElementById("reviewScript").value=data.script||"";
+document.getElementById("uploadStatus").textContent=
+data.status==="Approved"?"Approved — ready for next setup":"Upload Locked — approval required";
+document.getElementById("uploadButton").disabled=true;
+}
+refresh();
 </script>
 </body>
 </html>
