@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Imaan Verse AI Studio</title>
 <style>
 *{box-sizing:border-box}
@@ -15,7 +16,7 @@ button{padding:12px;border:0;border-radius:8px;background:#c5a45c;color:#152117;
 nav button{background:#1a3024;color:white;border:1px solid #385541}
 .card{background:#13251b;border:1px solid #304c39;border-radius:14px;padding:16px;margin:14px 0}
 input,select,textarea{width:100%;padding:12px;margin:8px 0 14px;background:#0b1911;color:white;border:1px solid #46604b;border-radius:8px;font:inherit}
-textarea{min-height:220px;line-height:1.5}
+textarea{min-height:180px;line-height:1.5}
 label{font-size:13px;color:#d8e0d8}
 .page{display:none}.page.active{display:block}
 .muted{color:#a9b8ac;font-size:13px}
@@ -23,19 +24,21 @@ label{font-size:13px;color:#d8e0d8}
 .status{font-weight:bold;color:#d9bd79}
 .green{background:#285b39;color:white}
 .red{background:#713333;color:white}
+.scene{border:1px solid #46604b;padding:14px;border-radius:10px;margin:12px 0}
+.scene h3{color:#d9bd79}
 </style>
 </head>
 <body>
 <header>
 <h1>☪ Imaan Verse AI Studio</h1>
-<p class="muted">Islamic & Informative YouTube Manager</p>
+<p class="muted">Islamic Cinematic & Animation Studio</p>
 </header>
-
 <main>
 <nav>
 <button onclick="page('home')">Dashboard</button>
 <button onclick="page('studio')">AI Studio</button>
 <button onclick="page('approval')">Approval</button>
+<button onclick="page('production')">Video Production</button>
 <button onclick="page('channel')">YouTube</button>
 </nav>
 
@@ -58,7 +61,6 @@ label{font-size:13px;color:#d8e0d8}
 <div class="card">
 <label>Video Topic</label>
 <input id="topic" placeholder="Example: Importance of Salah">
-
 <label>Category</label>
 <select id="category">
 <option>Quran & Tafsir</option>
@@ -67,33 +69,28 @@ label{font-size:13px;color:#d8e0d8}
 <option>Islamic Reminders</option>
 <option>Duas & Dhikr</option>
 </select>
-
 <label>Video Format</label>
 <select id="format">
 <option>YouTube Shorts</option>
 <option>Long Video</option>
 </select>
-
 <label>Language</label>
 <select id="language">
 <option>Hindi / Urdu</option>
 <option>Roman Urdu</option>
 <option>English</option>
 </select>
-
 <button onclick="makePrompt()">Generate Claude Prompt</button>
 </div>
-
 <div class="card">
 <h3>Claude Prompt</h3>
-<textarea id="prompt" placeholder="Your generated prompt will appear here"></textarea>
-<button onclick="copyPrompt()">Copy Prompt</button>
-<p class="muted">Paste this prompt into Claude. Then copy Claude's completed script below.</p>
+<textarea id="prompt" placeholder="Generated prompt appears here"></textarea>
+<button onclick="copyText('prompt')">Copy Prompt</button>
+<p class="muted">Paste the prompt into Claude and copy its response below.</p>
 </div>
-
 <div class="card">
 <h3>Paste AI Script</h3>
-<textarea id="script" placeholder="Paste your complete Claude script here..."></textarea>
+<textarea id="script" placeholder="Paste your complete script here"></textarea>
 <button onclick="submitScript()">Submit for Approval</button>
 <p id="submitStatus" class="status"></p>
 </div>
@@ -103,134 +100,145 @@ label{font-size:13px;color:#d8e0d8}
 <h2>Human Approval Center</h2>
 <div class="card">
 <p class="status" id="approvalStatus">No script submitted</p>
-<label>Review and edit your script</label>
-<textarea id="reviewScript" placeholder="Your submitted script will appear here"></textarea>
+<label>Review and edit script</label>
+<textarea id="reviewScript"></textarea>
 <button onclick="saveEdit()">Save Changes</button>
 <button class="green" onclick="approveScript()">Approve Script</button>
 <button class="red" onclick="rejectScript()">Reject Script</button>
 <p id="approvalMessage" class="status"></p>
 </div>
-<div class="notice">
-Check Quran verses, Hadith references, translations and authenticity yourself before approval.
+<div class="notice">Verify every Quran verse, Hadith reference and translation before approval.</div>
+</section>
+
+<section id="production" class="page">
+<h2>Video Production Studio</h2>
+<div class="card">
+<p class="muted">Style: Cinematic + Islamic Animation | Format: Vertical 9:16</p>
+<p class="status" id="productionStatus">Waiting for approved script</p>
+<button onclick="generateScenes()">Generate Scene Plan</button>
+</div>
+<div id="scenes"></div>
+<div class="card">
+<h3>Final Video Review</h3>
+<label><input type="checkbox" id="check1"> Narration and pronunciation checked</label><br>
+<label><input type="checkbox" id="check2"> Quran and Hadith references checked</label><br>
+<label><input type="checkbox" id="check3"> Visuals and subtitles checked</label><br>
+<label><input type="checkbox" id="check4"> Final video watched completely</label><br>
+<button onclick="finalReview()">Check Review</button>
+<p id="finalStatus" class="status"></p>
 </div>
 </section>
 
 <section id="channel" class="page">
 <h2>YouTube Upload</h2>
 <div class="card">
-<p id="uploadStatus" class="status">Upload Locked</p>
-<p class="muted">YouTube connection is not configured yet.</p>
-<button id="uploadButton" disabled>Upload Video (Not Connected)</button>
-<p class="muted">Approval here is a local workflow demonstration, not a secure server-side upload restriction.</p>
+<p class="status" id="uploadStatus">Upload Locked</p>
+<p class="muted">YouTube connection and real upload are not configured.</p>
+<button disabled>Upload Video (Not Connected)</button>
 </div>
 </section>
 
-<footer class="muted">IMAAN VERSE • AI STUDIO</footer>
+<footer class="muted">IMAAN VERSE • HUMAN REVIEW REQUIRED</footer>
 </main>
 
 <script>
 let data=JSON.parse(localStorage.getItem("imaanProject")||"{}");
-
-function store(){
-localStorage.setItem("imaanProject",JSON.stringify(data));
-}
-
+function store(){localStorage.setItem("imaanProject",JSON.stringify(data))}
 function page(id){
 document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
-
 function makePrompt(){
 let t=document.getElementById("topic").value.trim();
-if(!t){alert("Enter a video topic first");return;}
-
+if(!t){alert("Enter a topic first");return}
 let c=document.getElementById("category").value;
 let f=document.getElementById("format").value;
 let l=document.getElementById("language").value;
-
 document.getElementById("prompt").value=
 `Act as a careful Islamic educational video scriptwriter.
-
 TOPIC: ${t}
 CATEGORY: ${c}
 FORMAT: ${f}
 LANGUAGE: ${l}
-
-Write an engaging educational video script.
-Include narration, visual suggestions, 3 titles,
-description, hashtags and source references.
-
-ISLAMIC ACCURACY:
-- Never invent Quran verses or Hadith.
-- Give Surah names and Ayah numbers.
-- Give Hadith collection and reference only when reliably known.
-- Mark uncertain references NEEDS VERIFICATION.
-- Do not present personal opinions as Tafsir.
-- Do not claim a source was verified unless it was.
-- Keep the content respectful and educational.
-
+Write an engaging educational script with narration, visual suggestions, three titles, description and hashtags.
+Never invent Quran verses or Hadith. Give reliable references and mark uncertain claims NEEDS VERIFICATION. Separate Quran, Hadith and general advice. Do not present personal opinions as Tafsir.
 This is a draft for human review.`;
 }
-
-async function copyPrompt(){
-let p=document.getElementById("prompt");
-try{
-await navigator.clipboard.writeText(p.value);
-alert("Prompt copied!");
-}catch(e){
-p.select();
-alert("Select and copy the prompt.");
+async function copyText(id){
+let el=document.getElementById(id);
+try{await navigator.clipboard.writeText(el.value);alert("Copied!")}
+catch(e){el.select();alert("Select the text and copy it.")}
 }
-}
-
 function submitScript(){
 let s=document.getElementById("script").value.trim();
-if(!s){alert("Paste your AI script first");return;}
-
-data.script=s;
-data.status="Pending Approval";
-store();
-refresh();
+if(!s){alert("Paste script first");return}
+data.script=s;data.status="Pending Approval";store();refresh();
 document.getElementById("submitStatus").textContent="Submitted for human review!";
 }
-
 function saveEdit(){
 let s=document.getElementById("reviewScript").value.trim();
-if(!s){alert("Script cannot be empty");return;}
+if(!s){alert("Script cannot be empty");return}
 data.script=s;
 if(data.status==="Approved")data.status="Pending Approval";
-store();
-refresh();
-document.getElementById("approvalMessage").textContent="Changes saved. Review again before approval.";
+store();refresh();
+document.getElementById("approvalMessage").textContent="Saved. Review and approve again.";
 }
-
 function approveScript(){
-if(!data.script){alert("No script to approve");return;}
-if(!confirm("Have you checked the script and all religious references?"))return;
-data.status="Approved";
-store();
-refresh();
+if(!data.script){alert("No script to approve");return}
+if(!confirm("Have you checked the script and religious references?"))return;
+data.status="Approved";store();refresh();
 document.getElementById("approvalMessage").textContent="Script approved by you.";
 }
-
 function rejectScript(){
-if(!data.script){alert("No script to reject");return;}
-if(!confirm("Reject this script?"))return;
-data.status="Rejected";
-store();
-refresh();
+if(!data.script){alert("No script to reject");return}
+data.status="Rejected";store();refresh();
 document.getElementById("approvalMessage").textContent="Script rejected.";
 }
-
+function generateScenes(){
+if(data.status!=="Approved"){
+alert("Approve the script first.");return;
+}
+let scenes=[
+["Opening","Peaceful mosque at dawn, cinematic golden sunlight, slow camera movement, subtle animated dust particles."],
+["Quran Reference 1","Beautiful Quran on a wooden stand, warm natural light, elegant geometric animation. Add verified Surah Ta-Ha 20:14 reference."],
+["Quran Reference 2","Peaceful sunrise over an Islamic architectural setting, gentle animated light patterns. Add verified Surah Al-Ankabut 29:45 reference."],
+["Quran Reference 3","Five prayer times represented with a tasteful animated clock and changing sky. Add Surah An-Nisa 4:103 reference."],
+["Hadith","Elegant five pillars infographic with subtle golden motion graphics. Display the verified Hadith reference."],
+["Closing Reminder","Peaceful prayer-space silhouette, cinematic fade, elegant Imaan Verse title and subscribe animation."]
+];
+let box=document.getElementById("scenes");
+box.innerHTML="";
+scenes.forEach((s,i)=>{
+let div=document.createElement("div");
+div.className="scene";
+let h=document.createElement("h3");
+h.textContent="Scene "+(i+1)+" — "+s[0];
+let p=document.createElement("p");
+p.textContent=s[1];
+let b=document.createElement("button");
+b.textContent="Copy Visual Prompt";
+b.onclick=()=>{navigator.clipboard.writeText(s[1]).then(()=>alert("Visual prompt copied!")).catch(()=>alert("Copy not available. Select the prompt text."))};
+div.append(h,p,b);
+box.append(div);
+});
+document.getElementById("productionStatus").textContent="Scene plan created — 6 scenes";
+data.scenesCreated=true;store();
+}
+function finalReview(){
+let checks=["check1","check2","check3","check4"];
+if(!checks.every(id=>document.getElementById(id).checked)){
+document.getElementById("finalStatus").textContent="Please complete all review checks.";
+return;
+}
+document.getElementById("finalStatus").textContent="Review checklist completed. This does not upload a video.";
+}
 function refresh(){
 let exists=!!data.script;
 document.getElementById("projectCount").textContent=exists?"1":"0";
 document.getElementById("homeStatus").textContent=data.status||"No script submitted";
 document.getElementById("approvalStatus").textContent=data.status||"No script submitted";
 document.getElementById("reviewScript").value=data.script||"";
-document.getElementById("uploadStatus").textContent=
-data.status==="Approved"?"Approved — ready for next setup":"Upload Locked — approval required";
-document.getElementById("uploadButton").disabled=true;
+document.getElementById("uploadStatus").textContent="Upload not connected — manual upload only";
 }
 refresh();
 </script>
