@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI YouTube Manager</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d18;color:#fff;font-family:Arial,sans-serif}
+header{padding:22px;background:#11182a;border-bottom:1px solid #27314a}
+h1{margin:0;color:#8b9cff;font-size:24px}
+header p{color:#aab3c8}
+main{padding:20px;max-width:1100px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
+.card{background:#151e32;border:1px solid #293653;border-radius:15px;padding:20px;margin-bottom:15px}
+h2{font-size:18px}
+.number{font-size:30px;color:#9caeff;font-weight:bold}
+button{background:#687cff;color:white;border:0;border-radius:9px;padding:12px 16px;font-weight:bold;margin-top:10px}
+input{width:100%;padding:14px;border-radius:8px;border:1px solid #44506a;background:#0d1424;color:white;margin-top:10px}
+.small{color:#aab3c8;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+<h1>▶ AI YouTube Manager</h1>
+<p>Your smart channel management dashboard</p>
+</header>
+<main>
+<div class="grid">
+<div class="card"><h2>Content Ideas</h2><div class="number">∞</div><p class="small">Generate new video ideas</p></div>
+<div class="card"><h2>Pending Approval</h2><div class="number">0</div><p class="small">Review before publishing</p></div>
+<div class="card"><h2>Scheduled Videos</h2><div class="number">0</div><p class="small">Plan your uploads</p></div>
+</div>
+<div class="card">
+<h2>AI Content Assistant</h2>
+<p class="small">Enter a topic to generate a video idea.</p>
+<input id="topic" placeholder="Example: Importance of Salah">
+<button onclick="generate()">Generate Idea</button>
+<div id="result"></div>
+</div>
+<div class="card">
+<h2>Approval Center</h2>
+<p class="small">All content must be reviewed and approved before publishing.</p>
+<button onclick="alert('Demo mode: No video has been published.')">Review Demo</button>
+</div>
+<div class="card">
+<h2>YouTube Channel</h2>
+<p class="small">YouTube connection will be configured later.</p>
+<button onclick="alert('YouTube OAuth setup is coming next.')">Connect YouTube</button>
+</div>
+<p class="small">DEMO MODE • No real uploads or API connections yet.</p>
+</main>
+<script>
+function generate(){
+let topic=document.getElementById('topic').value.trim();
+if(!topic){alert('Please enter a topic');return;}
+document.getElementById('result').innerHTML=
+'<div class="card"><h2>Suggested Idea</h2><p>'+topic.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p><p class="small">Review and verify all information before using or publishing.</p></div>';
+}
+</script>
+</body>
+</html>
