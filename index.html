@@ -2,43 +2,47 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IMAAN VERSE | AI Studio</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISLAMIC REMINDER | AI Studio</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#091510;color:#f5f5ed;font-family:Arial,sans-serif}
-header{padding:22px 16px;background:#10251c;border-bottom:1px solid #31533e}
-h1{color:#d9bd79;margin:0;font-size:25px}
-header p{color:#a9b8ac;margin:8px 0 0;font-size:13px}
-main{max-width:850px;margin:auto;padding:16px}
-.card{background:#13251b;border:1px solid #304c39;border-radius:14px;padding:16px;margin:14px 0}
-h2{font-size:18px;color:#e5cf99;margin:0 0 12px}
+header{padding:24px 17px;background:#10251c;border-bottom:1px solid #31533e}
+h1{color:#dfc482;margin:0;font-size:24px}
+header p{color:#a9b8ac;font-size:13px}
+main{max-width:850px;margin:auto;padding:15px}
+.card{background:#13251b;border:1px solid #304c39;border-radius:14px;padding:17px;margin:14px 0}
+h2{font-size:18px;color:#e5cf99}
 h3{font-size:15px;color:#d9bd79}
-p,.muted{color:#a9b8ac;font-size:13px;line-height:1.6}
-label{display:block;font-size:13px;color:#d8e0d8;margin:12px 0 6px}
-input,textarea,select{width:100%;padding:12px;margin:5px 0;background:#0b1911;color:white;border:1px solid #46604b;border-radius:8px;font:inherit}
-textarea{min-height:150px;line-height:1.6}
-button{padding:12px 15px;border:0;border-radius:8px;background:#c5a45c;color:#152117;font-weight:bold;margin:5px 3px;cursor:pointer}
+p{color:#a9b8ac;font-size:13px;line-height:1.6}
+label{display:block;font-size:13px;margin:12px 0 6px}
+input,textarea,select{width:100%;padding:12px;background:#0b1911;color:white;border:1px solid #46604b;border-radius:8px;margin:5px 0;font:inherit}
+textarea{min-height:150px}
+button{padding:12px 15px;border:0;border-radius:8px;background:#c5a45c;color:#152117;font-weight:bold;margin:5px 3px}
 .secondary{background:#1a3024;color:white;border:1px solid #46604b}
 .danger{background:#633b32;color:white}
-.status{color:#d9bd79;font-weight:bold}
-.step{padding:12px;background:#0e1d14;border:1px solid #304c39;border-radius:9px;margin:8px 0}
-.nav{display:flex;gap:6px;overflow:auto;padding:12px 0}
+.nav{display:flex;gap:5px;overflow-x:auto;padding:12px 0}
 .nav button{white-space:nowrap;font-size:12px}
-.page{display:none}.active{display:block}
+.page{display:none}
+.page.active{display:block}
+.step{padding:12px;background:#0e1d14;border:1px solid #304c39;border-radius:9px;margin:8px 0}
 .notice{padding:12px;background:#10251c;border-left:3px solid #c5a45c;margin:12px 0;font-size:13px;line-height:1.6}
+.status{color:#dfc482;font-weight:bold}
 footer{text-align:center;color:#788d7d;font-size:12px;padding:25px}
 </style>
 </head>
 <body>
+
 <header>
-<h1>﷽ IMAAN VERSE</h1>
+<h1>ISLAMIC REMINDER</h1>
 <p>AI YouTube Production Studio</p>
+<p>@ISLAMICREMINDER_YT-s | 13,500+ Subscribers</p>
 </header>
+
 <main>
 <div class="notice">
-<strong>Human Approval System</strong><br>
-No video should be uploaded without your final approval. AI services are not connected yet.
+<strong>Human Approval Required</strong><br>
+No video should be uploaded without your final approval.
 </div>
 
 <div class="nav">
@@ -51,22 +55,23 @@ No video should be uploaded without your final approval. AI services are not con
 
 <section id="dashboard" class="page active">
 <div class="card">
-<h2>Welcome to Imaan Verse</h2>
-<p>Your Islamic educational video production workspace.</p>
+<h2>Welcome to Islamic Reminder</h2>
+<p>Your Islamic video production workspace.</p>
 <h3>Current Project</h3>
 <p id="dashTopic">No project created yet.</p>
-<p>Script: <span class="status" id="dashScript">Pending</span></p>
-<p>Production: <span class="status" id="dashProduction">Not started</span></p>
-<p>Final video: <span class="status" id="dashFinal">Pending</span></p>
-<p>Upload: <span class="status" id="dashUpload">Not approved</span></p>
+<p>Script: <span id="dashScript" class="status">Pending</span></p>
+<p>Production: <span id="dashProduction" class="status">Not started</span></p>
+<p>Final Video: <span id="dashFinal" class="status">Pending</span></p>
+<p>YouTube Upload: <span id="dashUpload" class="status">Not approved</span></p>
 </div>
+
 <div class="card">
 <h2>Production Workflow</h2>
 <div class="step">01 — Topic and Script</div>
-<div class="step">02 — Your Script Approval</div>
+<div class="step">02 — Script Approval</div>
 <div class="step">03 — Licensed Visuals and AI Voice</div>
 <div class="step">04 — Subtitles and Video Rendering</div>
-<div class="step">05 — Your Final Video Approval</div>
+<div class="step">05 — Final Video Approval</div>
 <div class="step">06 — YouTube Upload Approval</div>
 </div>
 </section>
@@ -76,6 +81,7 @@ No video should be uploaded without your final approval. AI services are not con
 <h2>AI Script Studio</h2>
 <label>Video Topic</label>
 <input id="topic" placeholder="Example: Importance of Salah">
+
 <label>Category</label>
 <select id="category">
 <option>Quran and Tafsir</option>
@@ -84,20 +90,24 @@ No video should be uploaded without your final approval. AI services are not con
 <option>Duas and Dhikr</option>
 <option>Seerah</option>
 </select>
+
 <label>Language</label>
 <select id="language">
 <option>Hindi / Urdu</option>
 <option>Roman Urdu</option>
 <option>English</option>
 </select>
+
 <label>Video Format</label>
 <select id="format">
 <option>YouTube Shorts (45–60 seconds)</option>
 <option>YouTube Video (3–5 minutes)</option>
 </select>
+
 <label>Script</label>
 <textarea id="scriptText" placeholder="Paste your AI-generated script here..."></textarea>
-<div class="notice">You can prepare the script using Claude or another AI and paste it here. Quran and Hadith references must be verified from reliable sources.</div>
+
+<div class="notice">Verify Quran and Hadith references using reliable sources before approval.</div>
 <button onclick="saveScript()">Save Script</button>
 <button onclick="approveScript()">Approve Script</button>
 <p id="scriptStatus" class="status">Status: Pending</p>
@@ -107,12 +117,11 @@ No video should be uploaded without your final approval. AI services are not con
 <section id="production" class="page">
 <div class="card">
 <h2>Automatic Video Production</h2>
-<p>Production checklist for the approved script.</p>
-<div class="notice">Production integrations are not connected yet. This page does not generate or download videos by itself.</div>
+<div class="notice">Production integrations are not connected yet. This dashboard currently tracks the workflow; it does not generate videos automatically.</div>
 <div class="step">Visuals — <span id="v1">Waiting</span></div>
 <div class="step">Voiceover — <span id="v2">Waiting</span></div>
 <div class="step">Subtitles — <span id="v3">Waiting</span></div>
-<div class="step">Video rendering — <span id="v4">Waiting</span></div>
+<div class="step">Video Rendering — <span id="v4">Waiting</span></div>
 <button onclick="checkProduction()">Check Approval</button>
 </div>
 </section>
@@ -120,8 +129,7 @@ No video should be uploaded without your final approval. AI services are not con
 <section id="final" class="page">
 <div class="card">
 <h2>Final Video Approval</h2>
-<p>When the rendered video is ready, add its preview link here.</p>
-<label>Video Preview URL</label>
+<label>Video Preview Link</label>
 <input id="videoUrl" placeholder="Paste your video preview link">
 <button onclick="saveVideo()">Save Preview</button>
 <p id="videoStatus" class="status">Status: Pending</p>
@@ -135,26 +143,32 @@ No video should be uploaded without your final approval. AI services are not con
 <h2>YouTube Upload Approval</h2>
 <label>Video Title</label>
 <input id="ytTitle" placeholder="Enter final video title">
+
 <label>Description</label>
 <textarea id="ytDescription" placeholder="Enter video description"></textarea>
+
 <label>Tags</label>
 <input id="ytTags" placeholder="Islam, Quran, Salah">
-<div class="notice">YouTube is not connected yet. No video will be uploaded from this dashboard.</div>
+
+<div class="notice">YouTube upload integration is not connected. Approval here does not upload a video.</div>
 <p id="uploadStatus" class="status">Upload status: Not approved</p>
 <button onclick="approveUpload()">Approve Upload</button>
 </div>
 </section>
 </main>
-<footer>IMAAN VERSE • Islamic Educational Media Studio</footer>
+
+<footer>ISLAMIC REMINDER • Islamic Educational Media Studio</footer>
 
 <script>
 const $=id=>document.getElementById(id);
-function get(k,d=""){return localStorage.getItem("iv_"+k)||d}
-function set(k,v){localStorage.setItem("iv_"+k,v)}
+const get=(k,d="")=>localStorage.getItem("ir_"+k)||d;
+const set=(k,v)=>localStorage.setItem("ir_"+k,v);
+
 function show(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 $(id).classList.add("active");
 }
+
 function saveScript(){
 set("topic",$("topic").value);
 set("script",$("scriptText").value);
@@ -162,59 +176,75 @@ set("category",$("category").value);
 set("language",$("language").value);
 set("format",$("format").value);
 set("scriptApproved","no");
-$("scriptStatus").textContent="Status: Saved — Approval required";
+$("scriptStatus").textContent="Saved — Approval required";
 refresh();
 }
+
 function approveScript(){
 if(!$("topic").value.trim()||!$("scriptText").value.trim()){
-alert("Please enter the topic and script first.");return;
+alert("Enter the topic and script first.");return;
 }
-save("scriptApproved","yes");
-$("scriptStatus").textContent="Status: Approved by you";
+saveScript();
+set("scriptApproved","yes");
+$("scriptStatus").textContent="Approved by you";
 refresh();
 }
-function save(k,v){set(k,v)}
+
 function checkProduction(){
 if(get("scriptApproved")!=="yes"){
 alert("Approve the script first.");return;
 }
 alert("Script approved. Production integrations still need to be connected.");
 }
+
 function saveVideo(){
 set("videoUrl",$("videoUrl").value);
-$("videoStatus").textContent="Status: Preview link saved";
-}
-function approveFinal(){
-if(get("scriptApproved")!=="yes"){alert("Script approval is required.");return;}
-if(!$("videoUrl").value.trim()){alert("Add the final video preview link first.");return;}
-set("finalApproved","yes");
-$("videoStatus").textContent="Status: Final video approved";
+set("finalApproved","no");
+$("videoStatus").textContent="Preview saved — Approval required";
 refresh();
 }
+
+function approveFinal(){
+if(get("scriptApproved")!=="yes"){
+alert("Script approval is required first.");return;
+}
+if(!$("videoUrl").value.trim()){
+alert("Add the video preview link first.");return;
+}
+set("finalApproved","yes");
+$("videoStatus").textContent="Final video approved";
+refresh();
+}
+
 function rejectFinal(){
 set("finalApproved","no");
-$("videoStatus").textContent="Status: Rejected — changes required";
+$("videoStatus").textContent="Rejected — Changes required";
 refresh();
 }
+
 function approveUpload(){
 if(get("finalApproved")!=="yes"){
 alert("Final video approval is required first.");return;
 }
-if(!$("ytTitle").value.trim()){alert("Enter a video title first.");return;}
+if(!$("ytTitle").value.trim()){
+alert("Enter a video title first.");return;
+}
 set("uploadApproved","yes");
 set("ytTitle",$("ytTitle").value);
 set("ytDescription",$("ytDescription").value);
 set("ytTags",$("ytTags").value);
-$("uploadStatus").textContent="Upload approved — YouTube connection required";
+$("uploadStatus").textContent="Approved — YouTube connection required";
 refresh();
 }
+
 function refresh(){
 $("dashTopic").textContent=get("topic","No project created yet.");
 $("dashScript").textContent=get("scriptApproved")==="yes"?"Approved":"Pending";
 $("dashProduction").textContent=get("scriptApproved")==="yes"?"Awaiting integrations":"Not started";
 $("dashFinal").textContent=get("finalApproved")==="yes"?"Approved":"Pending";
-$("dashUpload").textContent=get("uploadApproved")==="yes"?"Approved — not uploaded":"Not approved";
+$("dashUpload").textContent=get("uploadApproved")==="yes"?"Approved — Not uploaded":"Not approved";
 }
+
 $("topic").value=get("topic");
 $("scriptText").value=get("script");
 $("category").value=get("category","Quran and Tafsir");
